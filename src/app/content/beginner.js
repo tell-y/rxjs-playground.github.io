@@ -4,16 +4,16 @@ export default [
     editor : {
       html : '',
       js : `// A simple illustration to count to 3.
-Rx.Observable.interval(1000).take(3).subscribe(v => console.log(v))
+rxjs.interval(1000).take(3).subscribe(v => console.log(v))
     `
     }
   },
   {
-    title : "Observable.create",
+    title : "rxjs.Observable",
     editor : {
-      js : `// Observable.create
+      js : `// rxjs.Observable
 
-const base = Rx.Observable.create(function(observer){
+const base = new rxjs.Observable(function(observer){
   observer.next(1);
   observer.next(2);
   observer.next(42);
@@ -35,7 +35,7 @@ base
       html : `<button id="myButton">Click me</button>`,
       js : `const button = document.getElementById("myButton");
 
-Rx.Observable.fromEvent(button, "click")
+rxjs.fromEvent(button, "click")
 .subscribe(x => console.log("click"))`
     }
   },{
@@ -45,7 +45,7 @@ Rx.Observable.fromEvent(button, "click")
       js : `//Filter even numbers out from a list
 
 const evenStream
-   = Rx.Observable.of(15,1,2,3,4).filter(num => num % 2 == 0);
+   = rxjs.of(15,1,2,3,4).filter(num => num % 2 == 0);
 
 evenStream.subscribe(x => console.log(x, " is even")); `
     }
@@ -56,7 +56,7 @@ evenStream.subscribe(x => console.log(x, " is even")); `
       js : `//Separate a list of numbers into odd and even
 
 const [evenStream, oddStream]
-   = Rx.Observable.of(15,1,2,3,4).partition(num => num % 2 == 0);
+   = rxjs.of(15,1,2,3,4).partition(num => num % 2 == 0);
 
 //subscribed first => gets values first
 oddStream.subscribe(x => console.log(x," is odd"));
@@ -128,17 +128,17 @@ const nextButton = document.getElementById("next"),
 prevButton = document.getElementById("prev");
 
 //Create event streams
-const keyDown = Rx.Observable.fromEvent(document,"keydown");
-const nextButtonClick = Rx.Observable.fromEvent(nextButton,"click")
-const prevButtonClick = Rx.Observable.fromEvent(prevButton,"click")
-const slideClick = Rx.Observable.fromEvent(slides, "click");
-const init = Rx.Observable.of("startup")
+const keyDown = rxjs.fromEvent(document,"keydown");
+const nextButtonClick = rxjs.fromEvent(nextButton,"click")
+const prevButtonClick = rxjs.fromEvent(prevButton,"click")
+const slideClick = rxjs.fromEvent(slides, "click");
+const init = rxjs.of("startup")
 
 
 
 //Merge event streams which do the same thing
-const nextObs = Rx.Observable.merge(nextButtonClick, slideClick);
-const prevObs = Rx.Observable.merge(prevButtonClick, keyDown);
+const nextObs = rxjs.operators.merge(nextButtonClick, slideClick);
+const prevObs = rxjs.operators.merge(prevButtonClick, keyDown);
 
 
 // Add subscriptions to the next and previous buttons
@@ -147,10 +147,10 @@ prevObs.subscribe(() => showSlide(currentSlide - 1))
 
 
 // Add relationships between next, prev and startup streams
-Rx.Observable.merge(nextObs,prevObs,init)
+rxjs.operators.merge(nextObs,prevObs,init)
 .map(()=> {
-  const autoplay =   Rx.Observable.interval(2000)
-  .takeUntil( Rx.Observable.merge(nextObs,prevObs));
+  const autoplay =   rxjs.interval(2000)
+  .takeUntil( rxjs.operators.merge(nextObs,prevObs));
 
   // log autoplay behaviour to demonstrate the timer changes
   autoplay.subscribe( v => console.log("autoplaying"),

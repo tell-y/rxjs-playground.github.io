@@ -13,7 +13,7 @@ export default [{
     "deeppink"
   ]
 
-Rx.Observable.interval(10).subscribe(() => {
+rxjs.interval(10).subscribe(() => {
  const index =  Math.floor(Math.random() * 16);
  const tile =  Array.from(document.getElementsByClassName("tile"))[index];
   const colorIndex =  Math.floor(Math.random() * colors.length);
@@ -88,13 +88,13 @@ function draw(){
 draw()
 
 
-Rx.Observable.interval(1000).subscribe(()=>{
+rxjs.interval(1000).subscribe(()=>{
   centerX = Math.random() * (canvas.width - (radius + 1) * 4);
   centerY = Math.random() * (canvas.height - (radius + 1) * 4);
 })
 
 
-Rx.Observable.interval(10).subscribe(()=>{
+rxjs.interval(10).subscribe(()=>{
   if(posX > centerX){
     posX--;
   }
@@ -159,7 +159,7 @@ function draw(){
 draw()
 
 
-const timer =  Rx.Observable.interval(100);
+const timer =  rxjs.interval(100);
 
 timer.subscribe(()=>{
   centerX += dirX * 4;

@@ -3,7 +3,7 @@ export default [
     title : 'Clicks and double clicks',
     editor : {
       html : ``,
-      js : `const clickObservable = Rx.Observable.fromEvent(document, "click")
+      js : `const clickObservable = rxjs.fromEvent(document, "click")
 clickObservable.subscribe(() => console.log("click"));
 
 clickObservable.bufferTime(250)
@@ -23,7 +23,7 @@ clickObservable.bufferTime(250)
     },3000)
 })
 
-Rx.Observable.fromPromise(p).subscribe(val => console.log(val));
+rxjs.fromPromise(p).subscribe(val => console.log(val));
     `
     }
   },{
@@ -35,7 +35,7 @@ Rx.Observable.fromPromise(p).subscribe(val => console.log(val));
 
 // One click allowed per 2 seconds
 
-Rx.Observable.fromEvent(document, "click")
+rxjs.fromEvent(document, "click")
 .throttleTime(2000)
 .subscribe(x => console.log("click"))
 `
@@ -48,9 +48,9 @@ Rx.Observable.fromEvent(document, "click")
       // Merge 2 observables
 
 
-      const hundreds = Rx.Observable.interval(1000);
+      const hundreds = rxjs.interval(1000);
 
-      const three_hundreds = Rx.Observable.interval(1500);
+      const three_hundreds = rxjs.interval(1500);
 
       hundreds.merge(three_hundreds)
       .subscribe(console.log)

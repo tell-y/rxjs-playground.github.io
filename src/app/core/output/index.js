@@ -1,25 +1,24 @@
-import React ,{PropTypes, Component} from 'react';
-export const CONSOLE_EVENT = '@@CONSOLE_EVENT';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+export const CONSOLE_EVENT = "@@CONSOLE_EVENT";
 console.log(CONSOLE_EVENT);
 
-export default class Output extends Component{
-
+export default class Output extends Component {
   static contextTypes = {
-    output : PropTypes.string,
-    html : PropTypes.string
-  }
-
-  componentDidMount(){
+    output: PropTypes.string,
+    html: PropTypes.string,
+  };
+  componentDidMount() {
     this.set();
   }
 
-  run(){
+  run() {
     return this.update();
   }
 
   set = () => {
-    const frameWindow =  this.iframe.contentWindow,
-          frameDoc = frameWindow.document;
+    const frameWindow = this.iframe.contentWindow,
+      frameDoc = frameWindow.document;
     frameDoc.open();
     frameDoc.write(`
       <!DOCTYPE html>
@@ -32,7 +31,7 @@ export default class Output extends Component{
               color : white;
             }
           </style>
-          <script async src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/5.3.0/Rx.min.js" charset="utf-8"></script>
+          <script async src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/6.5.5/rxjs.umd.min.js" charset="utf-8"></script>
 
         </head>
         <body>
@@ -41,18 +40,17 @@ export default class Output extends Component{
       </html>
     `);
     frameDoc.close();
-  }
+  };
 
   update = () => {
-    const frameWindow =  this.iframe.contentWindow,
-          frameDoc = frameWindow.document;
-    frameDoc.body.innerHTML = (`
+    const frameWindow = this.iframe.contentWindow,
+      frameDoc = frameWindow.document;
+    frameDoc.body.innerHTML = `
           <div id="core">
             ${this.context.html}
           </div>
-    `);
-    const exp = (
-      `
+    `;
+    const exp = `
       var console = {
           log: function(){
               var event = new CustomEvent("${CONSOLE_EVENT}", { detail : {
@@ -62,25 +60,27 @@ export default class Output extends Component{
           }
       };
       ${this.context.output}
-      `);
-     try{
-       frameWindow.eval(exp)
-     }catch(err){
-       document.dispatchEvent(new CustomEvent(CONSOLE_EVENT,{
-         detail : {
-           args : [err]
-         }
-       }))
-     }
-  }
-  render(){
-    return <div id="output">
-      <h3>Output</h3>
-      <div>
-      <iframe ref={n => this.iframe = n}>
-
-      </iframe>
+      `;
+    try {
+      frameWindow.eval(exp);
+    } catch (err) {
+      document.dispatchEvent(
+        new CustomEvent(CONSOLE_EVENT, {
+          detail: {
+            args: [err],
+          },
+        })
+      );
+    }
+  };
+  render() {
+    return (
+      <div id="output">
+        <h3>Output</h3>
+        <div>
+          <iframe ref={(n) => (this.iframe = n)}></iframe>
+        </div>
       </div>
-    </div>
+    );
   }
 }

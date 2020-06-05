@@ -10,10 +10,10 @@ export default [
 <p data-observe="anotherText"></p>`,
       js : `//Naive one way data binding
 
-Rx.Observable.from(document.querySelectorAll("[data-observe]"))
+rxjs.fromEvent(document.querySelectorAll("[data-observe]"))
 .map( k => {
   const input = document.querySelectorAll("[data-bind='"+k.getAttribute("data-observe")+"']");
-  return Rx.Observable.fromEvent(input, "input").map(e => {
+  return rxjs.fromEvent(input, "input").map(e => {
     return {
     element : k,
     value : e.target.value

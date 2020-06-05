@@ -10,7 +10,7 @@ module.exports = {
   },
   devtool : '#source-map',
   output: {
-    path: path.join(__dirname,"dist"),
+    path: path.join(__dirname,"public"),
     filename: '[name].js',
     publicPath : "http://localhost:8080/assets"
   },

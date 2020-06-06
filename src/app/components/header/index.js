@@ -15,14 +15,10 @@ export default class Header extends Component {
           <a
             className="github-button"
             href="https://github.com/tell-y/rxjs-playground.github.io"
-            data-icon="octicon-star"
-            data-style="mega"
-            data-count-href="/rxjs-playground/rxjs-playground.github.io/stargazers"
-            data-count-api="/repos/rxjs-playground/rxjs-playground.github.io#stargazers_count"
-            data-count-aria-label="# stargazers on GitHub"
-            aria-label="Star rxjs-playground/rxjs-playground.github.io on GitHub"
+            data-size="large"
+            aria-label="View tell-y/rxjs-playground.github.io on GitHub"
           >
-            Github
+            View on GitHub
           </a>
         </p>
       </header>

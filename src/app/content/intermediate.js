@@ -1,71 +1,79 @@
 export default [
   {
-    title : 'Clicks and double clicks',
-    editor : {
-      html : ``,
-      js : `const clickObservable = rxjs.fromEvent(document, "click")
-clickObservable.subscribe(() => console.log("click"));
+    title: "Clicks and double clicks",
+    editor: {
+      html: ``,
+      js: `const {
+  fromEvent,
+  operators: {
+    bufferTime,
+    filter,
+    map,
+  },
+} = rxjs;
+const click$ = fromEvent(document, "click");
+click$.subscribe(() => console.log("click"));
 
-clickObservable.bufferTime(250)
-.map(arr => arr.length)
-.filter(len => len == 2 )
-.subscribe(x => console.log("double click"))
-    `
-    }
+click$
+  .pipe(bufferTime(500))
+  .pipe(map(arr => arr.length), filter(len => len === 2 ))
+  .subscribe(x => console.log("double click"));
+`,
+    },
   },
   {
-    title : 'Basic promises',
-    editor : {
-      html : ``,
-      js : `const p = new Promise((resolve, reject) => {
+    title: "Basic promises",
+    editor: {
+      html: ``,
+      js: `const p = new Promise((resolve, reject) => {
     setTimeout(()=>{
-       resolve(42)
+        resolve(42);
     },3000)
 })
 
-rxjs.fromPromise(p).subscribe(val => console.log(val));
-    `
-    }
-  },{
-    title : "ThrottleTime",
-    editor : {
-      html : ``,
-      js : `
-//Throttling
-
+rxjs.from(p).subscribe(val => console.log(val));
+`,
+    },
+  },
+  {
+    title: "ThrottleTime",
+    editor: {
+      html: ``,
+      js: `//Throttling
 // One click allowed per 2 seconds
+const { fromEvent, operators: { throttleTime } } = rxjs;
+fromEvent(document, "click")
+  .pipe(throttleTime(2000))
+  .subscribe(x => console.log("click"));
+`,
+    },
+  },
+  {
+    title: "Merge",
+    editor: {
+      html: ``,
+      js: `// Merge 2 observables
+const { interval, operators: { merge } } = rxjs;
+const interval1$ = interval(1000);
+const interval2$ = interval(2000);
 
-rxjs.fromEvent(document, "click")
-.throttleTime(2000)
-.subscribe(x => console.log("click"))
-`
-    }
-  },{
-    title : "Merge",
-    editor : {
-      html : ``,
-      js : `
-      // Merge 2 observables
+interval1$
+  .pipe(merge(interval2$))
+  .subscribe(console.log);
+`,
+    },
+  },
+  {
+    title: "Subjects",
+    editor: {
+      js: `const store = new rxjs.Subject();
 
+store.subscribe(v => console.log(v));
 
-      const hundreds = rxjs.interval(1000);
-
-      const three_hundreds = rxjs.interval(1500);
-
-      hundreds.merge(three_hundreds)
-      .subscribe(console.log)
-`
-    }
-  },{
-    title : "Subjects",
-    editor : {
-      js : `const store = new Rx.Subject();
-
-  store.subscribe(v => console.log(v));
-
-  store.next(1)
-  store.next(2)
-  store.next(3)`
-    }
-  }
-]
+store.next(1);
+store.next(2);
+store.next(3);
+`,
+    },
+  },
+];

@@ -2,23 +2,22 @@ export default [{
     title : 'Blinking boxes',
     editor : {
       js : `// Randomly color a set of boxes
-
-  const colors = [
-    "dodgerblue",
-    "rebeccapurple",
-    "limegreen",
-    "lightgoldenrodyellow",
-    "bisque",
-    "darkorange",
-    "deeppink"
-  ]
+const colors = [
+  "dodgerblue",
+  "rebeccapurple",
+  "limegreen",
+  "lightgoldenrodyellow",
+  "bisque",
+  "darkorange",
+  "deeppink"
+];
 
 rxjs.interval(10).subscribe(() => {
- const index =  Math.floor(Math.random() * 16);
- const tile =  Array.from(document.getElementsByClassName("tile"))[index];
+  const index =  Math.floor(Math.random() * 16);
+  const tile =  Array.from(document.getElementsByClassName("tile"))[index];
   const colorIndex =  Math.floor(Math.random() * colors.length);
- tile.setAttribute('style', "background-color : " + colors[colorIndex] );
-})`,
+  tile.setAttribute('style', "background-color : " + colors[colorIndex] );
+});`,
 html : `<style>
   .row {
     display : flex;
@@ -158,8 +157,8 @@ function draw(){
 
 draw()
 
-
-const timer =  rxjs.interval(100);
+const { interval, operators: { map, delay } } = rxjs;
+const timer =  interval(100);
 
 timer.subscribe(()=>{
   centerX += dirX * 4;
@@ -172,13 +171,18 @@ timer.subscribe(()=>{
   }
 });
 
-timer.map(()=>({
-  x : centerX,
-  y : centerY
-})).delay(200).subscribe(({x,y})=>{
-  posX = x, posY = y;
-})
-
+timer
+  .pipe(
+    map(()=>({
+      x : centerX,
+      y : centerY
+    })),
+    delay(200)
+  )
+  .subscribe(({x,y})=>{
+    posX = x, posY = y;
+  });
+        
 `,html : `<canvas id="mycanvas"></canvas>`
       }
     }
